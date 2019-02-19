@@ -1,0 +1,83 @@
+<h4>Please Enter the details of the Question</h4>
+<body>
+
+<label class="right" for="RightAnswer">
+    Right Answer
+<select class="right" id="RightAnswer"  name="RightAnswer">
+    <option value="A">A</option>
+    <option value="B">B</option>
+    <option value="C">C</option>
+    <option value="D">D</option>
+    <option value="E">E</option>
+
+</select>
+</label>
+<label align="center" for="Tag">
+    Tag
+    <input id="Tag" name="Tag" align="center"/>
+
+</label>
+<label for="Test">
+    Test
+    <input id="Test" name="Test"  />
+
+</label>
+<label for="Test_Type">
+    Test_Type
+    <input id="Test_type" name="Test_Type"  />
+
+</label>
+
+</body>
+
+<form method="post">
+    <label for="QuestionText">
+        Question Text
+        <input id="QuestionText" name="QuestionText"  />
+        <label class="error">{{errors.firstName}}</label>
+    </label>
+    <label for="AnswerA">
+        Answer A
+        <input id="AnswerA" name="AnswerA"  />
+
+    </label>
+    <label for="AnswerB">
+        Answer B
+        <input id="AnswerB" name="AnswerB"  />
+
+    </label>
+    <label for="AnswerC">
+        Answer C
+        <input id="AnswerC" name="AnswerC"  />
+      </label>
+    <label for="AnswerD">
+        Answer D
+        <input id="AnswerD" name="AnswerD"  />
+    </label>
+    <label for="AnswerE">
+        Answer E
+        <input id="AnswerE" name="AnswerE"  />
+
+    </label>
+
+    <button  type="submit">Save Question</button>
+
+
+</form>
+
+
+<button onclick="goBack()">Go Back</button>
+
+<script type="text/javascript">
+    function move() {
+        window.location.href = '/AddQuestions/DeleteDatabase'
+    }
+
+</script>
+<button onclick="move()">Delete Database </button>
+
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
