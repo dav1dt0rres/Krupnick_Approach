@@ -32,13 +32,10 @@ router.get('/', (req, res, next) => {
 
 
 router.post('/', (req, res, next) => {
-  //console.log("INside Welcome")
-  title="Welcome to your Dashboard "+ req.body.firstName
+  console.log("INside Welcome"+req.body.firstName)
+  title="Welcome to Dashboard"+req.body.firstName;
 
-  res.render('dashboard', {title})
-
-
-
+  res.redirect(307,'/dashboard');
 })
 
 

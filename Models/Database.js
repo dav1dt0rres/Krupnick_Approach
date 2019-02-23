@@ -6,10 +6,11 @@ const SessionSchema=mongoose.model('Session')
 const Question = require('./Question.js');
 module.exports= class Database {
 
-    constructor() {
+    constructor(Test_Type) {
         this.database  ;
         console.log('inside Database COnstructor')
         this.List_Questions=[];
+        this.Test_Type=Test_Type;
 
     }
     DeleteEntries() {
@@ -27,10 +28,12 @@ module.exports= class Database {
         if (this.List_Questions.length==0){
             console.log("Needs to refresh")
             this.getOrderedQuestions()
+
         }
 
         return this.List_Questions.pop();
     }
+
     getOrderedQuestions(){
 
         var Choice_List=[]
@@ -44,13 +47,13 @@ module.exports= class Database {
 
                 console.log("Question"+artwork.Question_body.join(" "))
                 //console.log("Choices"+artwork.Choices[counter].replace(/,/g, ' '))
-                console.log("Tag"+artwork.Tag)
+                //console.log("Tag"+artwork.Tag)
 
                 for(var i=0;i<artwork.Choices.length;++i){
                     artwork.Choices[i]=artwork.Choices[i].replace(/,/g, ' ');
                 }
-                console.log("Choices"+artwork.Choices)
-                console.log(" ")
+                //console.log("Choices"+artwork.Choices)
+                //console.log(" ")
                Question_object=new Question(artwork.Question_body.join(" "),artwork.Choices,artwork.Tag)
                keywords[counter]=Question_object;
                 ++counter;
@@ -61,7 +64,37 @@ module.exports= class Database {
         });
 
     }///Give me all the questions of a test in order 1-10,11-20 etc
+    SearchQuestion(test,test_Number,test_Type){
+        var Question_temp=null;
+        Question_database.find({Test:test,  Number:test_Number, Test_Type:test_Type},'Question_body Choices Tag Test Number ' +
+            'Test_Type Right_Answer Passage ').then( (artworks) => {
+            var Key_Object =null;
+            var Question_object=null;
+            // console.log("Table"+artworks)
+            console.log("INside the Database Search")
+            artworks.forEach( (artwork) => {
 
+                console.log("Returning Question"+artwork.Question_body.join(" "))
+                //console.log("Choices"+artwork.Choices[counter].replace(/,/g, ' '))
+                console.log("Returning Tag"+artwork.Tag)
+
+                for(var i=0;i<artwork.Choices.length;++i){
+                    artwork.Choices[i]=artwork.Choices[i].replace(/,/g, ' ');
+                }
+                console.log("Returning Choices"+artwork.Choices)
+                console.log(" ")
+
+                Question_object=new Question(artwork.Question_body.join(" "),artwork.Choices,artwork.Tag)
+
+                Question_object.setEditQuestion(artwork.Question_body.join(" "),artwork.Choices,artwork.Tag,
+                    artwork.Number,artwork.Test,artwork.Test_Type,artwork.Right_Answer,artwork.Passage)
+            });
+           Question_temp=Question_object;
+            console.log("Question Returning"+Question_temp.getQuestionText());
+            // Now do your job with all the retrieved keywords
+        });
+        return Question_temp;
+    }
     getSame_MethodQuestion(Question_Object){
         var Choice_List=[]
 
@@ -101,7 +134,9 @@ module.exports= class Database {
             Choices:[Body_List[1],Body_List[2],Body_List[3],Body_List[4],Body_List[5]],
             Test:Body_List[7],
             Test_Type: Body_List[8],
-            Right_Answer: Body_List[9]
+            Right_Answer: Body_List[9],
+            Passage:Body_List[10],
+            Number: Body_List[11]
 
         });
         newQuestion.save(function (err) {

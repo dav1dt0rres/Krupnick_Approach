@@ -1,66 +1,81 @@
 <h4>Please Enter the details of the Question</h4>
-<body>
 
-<label class="right" for="RightAnswer">
-    Right Answer
-<select class="right" id="RightAnswer"  name="RightAnswer">
-    <option value="A">A</option>
-    <option value="B">B</option>
-    <option value="C">C</option>
-    <option value="D">D</option>
-    <option value="E">E</option>
 
-</select>
-</label>
-<label align="center" for="Tag">
-    Tag
-    <input id="Tag" name="Tag" align="center"/>
+<form action="/AddQuestions"  method="post">
 
-</label>
-<label for="Test">
-    Test
-    <input id="Test" name="Test"  />
+    <button  id="Edit_Button" name="Edit_Button" type="submit">Edit a Question</button>
 
-</label>
-<label for="Test_Type">
-    Test_Type
-    <input id="Test_type" name="Test_Type"  />
 
-</label>
+    <label for="Passage">
+        Passage
 
-</body>
+        <input id="Passage" name="Passage" value="{{Passage}}"  />
 
-<form method="post">
+
+    </label>
+
     <label for="QuestionText">
         Question Text
-        <input id="QuestionText" name="QuestionText"  />
+        <input class="upper" id="QuestionText" name="QuestionText"  />
         <label class="error">{{errors.firstName}}</label>
+    </label>
+    <label for="Question_Number">
+        Question Number
+        <input id="Question_Number" name="Question_Number" value="{{Question_Number}}"  />
+
     </label>
     <label for="AnswerA">
         Answer A
-        <input id="AnswerA" name="AnswerA"  />
+        <input id="AnswerA" name="AnswerA" value="{{AnswerA}}" />
 
     </label>
     <label for="AnswerB">
         Answer B
-        <input id="AnswerB" name="AnswerB"  />
+        <input id="AnswerB" name="AnswerB" value="{{AnswerB}}" />
 
     </label>
     <label for="AnswerC">
         Answer C
-        <input id="AnswerC" name="AnswerC"  />
+        <input id="AnswerC" name="AnswerC" value="{{AnswerC}}" />
       </label>
     <label for="AnswerD">
         Answer D
-        <input id="AnswerD" name="AnswerD"  />
+        <input id="AnswerD" name="AnswerD" value="{{AnswerD}}"  />
     </label>
     <label for="AnswerE">
         Answer E
-        <input id="AnswerE" name="AnswerE"  />
+        <input id="AnswerE" name="AnswerE"  value="{{AnswerE}}" />
+
+    </label>
+    <label for="Tag">
+        Tag
+        <input id="Tag" name="Tag" value="{{Tag}}" />
+
+    </label>
+    <label  for="Test">
+        Test
+        <input id="Test"  name="Test" value="{{Test}}"  />
+
+    </label>
+    <label  for="Test_Type">
+        Test_Type
+        <input id="Test_type"  name="Test_Type" value="{{Test_Type}}"  />
+
+    </label>
+    <label class="right" for="RightAnswer">
+        Right Answer
+        <select id="RightAnswer"  name="RightAnswer">
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+            <option value="E">E</option>
+
+        </select>
 
     </label>
 
-    <button  type="submit">Save Question</button>
+    <button type="submit">Save Question</button>
 
 
 </form>

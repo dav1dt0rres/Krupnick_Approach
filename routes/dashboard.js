@@ -10,57 +10,82 @@ var timer;
 var descriptionList=[];
 var Responses=[];
 var mySet;
-var Database_Object;
-var Question_object;
+var Database_Object=null;
+var Question_object=null;
 var Student_Object;
 var title;
+var counter=0;
 
 router.get('/', function (req, res, next) {
-  //const { profile } = req.user
-  title="Beginning of Test Prompt"
-  console.log("inside dashboard")
-  Database_Object=new Database();
 
-  console.log("Request Body Text"+req.body.firstName,req.body.lastName,req.body.email)
-  var id=Database_Object.getStudentID(req.body.firstName,req.body.lastName,req.body.email);
-  Student_Object=new Student(req.body.firstName,req.body.lastName,req.body.email,id);
-  Database_Object.InitializeQuestions();
+    console.log("inside get Dashboard TO Start the TEst"+req.query.Time_Limit,req.query.Test_Type)
 
+    Database_Object=new Database(req.query.Test_Type);
+    var id=Database_Object.getStudentID(req.query.firstName,req.query.lastName,req.query.email);
+    Student_Object=new Student(req.query.FirstName,req.query.lastName,req.query.email,id);
+    Database_Object.InitializeQuestions();
+    title="This is a Sample Question"
+    res.render('register_Question', {title, Answer_A:"Sample A",
+        Answer_B:"SampleB",Answer_C:"Sample C",
 
-
-  res.render('register_Question',{title, Answer_A:"This is a Sample", Answer_B:"This is a Sample",Answer_C: "This is a Sample", storyboxID:"This is a Sample"})
+        storyboxID:"STORY BOARD"
+    })
 
 })
+router.get('/Question_Loop',function (req, res, next) {
+    console.log("Inside Question_Loop!!!!!!")
 
+    if (counter!=0){////Maintains the clock
+        clearInterval(mySet);
+    }
+    var duration=1*60
+    Question_object=Database_Object.getQuestion()
+
+    title=Question_object.Question_text;
+    res.render('register_Question', {title, Answer_A:Question_object.getOptions()[0],
+        Answer_B:Question_object.getOptions()[1],Answer_C:Question_object.getOptions()[2],
+        Answer_D: Question_object.getOptions()[3], Answer_E:Question_object.getOptions()[4],
+        storyboxID:Question_object.Question_text
+    })
+
+
+    if (counter!=0){
+        Question_object.recordResponse(req.body.combo,timer)
+        Responses.push(Question_object);
+        //Database_Object.recordSession(Question_object,Student_Object);
+    }
+
+
+    console.log(JSON.stringify(req.body))
+    startTimer(duration)
+    ++counter;
+})
+
+
+
+router.get('/SAT',function (req, res, next) {
+    console.log("inside SAT!!!!!!")
+
+    res.redirect('/AddQuestions')
+
+})
+router.get('/Skill',function (req, res, next) {
+    console.log("inside SkillBuilders!!!!!!")
+
+    res.redirect('/AddQuestions')
+
+})
 
 router.post('/', function (req, res, next) {
+    console.log("inside get Dashboard!!!!!!"+req.body.firstName)
+    res.render('dashboard', {title,FirstName:req.body.firstName,LastName:req.body.lastName, Email: req.body.email})
 
-  if (counter!=0){////Maintains the clock
-    clearInterval(mySet);
-  }
-  var duration=1*60
-  Question_object=Database_Object.getQuestion()
-
-  title=Question_object.Question_text;
-  res.render('register_Question', {title, Answer_A:Question_object.getOptions()[0],
-    Answer_B:Question_object.getOptions()[1],Answer_C:Question_object.getOptions()[2],
-    Answer_D: Question_object.getOptions()[3], Answer_E:Question_object.getOptions()[4],
-    storyboxID:Question_object.Question_text})
-
-
-  if (counter!=0){
-    Question_object.recordResponse(req.body.combo,timer)
-    Responses.push(Question_object);
-    Database_Object.recordSession(Question_object,Student_Object);
-  }
-
-
-  console.log(JSON.stringify(req.body))
-  startTimer(duration)
-  ++counter;
 
 
 })
+
+
+
 function SimilarMethod(){
   var duration=1*60
   Question_object=Database_Object.getSame_MethodQuestion(Responses[Responses.length-1]);

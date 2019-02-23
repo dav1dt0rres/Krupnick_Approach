@@ -6,8 +6,10 @@ var QuestionSchema = new Schema({
     Tag: String,
     Choices: [[String]],
     Test:String,
+    Number: String,
     Test_Type:String,
-    Right_Answer:String
+    Right_Answer:String,
+    Passage:String
 
 });
 

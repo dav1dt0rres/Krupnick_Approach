@@ -9,6 +9,8 @@ var logger = require('morgan');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const dashboardRouter=require('./routes/dashboard');
+const Test_OptionsRouter=require('./routes/Test_Options');
+const EditQuestionRouter = require('./routes/EditQuestion');
 const profileRouter = require('./routes/profile');
 const registrationRouter = require('./routes/register');
 const AddQuestionsRouter = require('./routes/AddQuestions');
@@ -42,6 +44,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/dashboard', dashboardRouter)
+app.use('/Test_Options', Test_OptionsRouter)
+app.use('/EditQuestion', EditQuestionRouter)
 app.use('/profile', oidc.ensureAuthenticated(), profileRouter)
 app.use('/register', registrationRouter)
 app.use('/AddQuestions', AddQuestionsRouter)

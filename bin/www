@@ -32,14 +32,21 @@ app.set('port', port);
 /**
  * Create HTTP server.
  */
+var ip = require('ip');
 
-var server = http.createServer(app);
+
+//Important Line//var server = http.createServer(app);
+var server=app.listen(4000,function () {
+  var host=ip.address()
+  console.log('running at http://' + host + ':' + port)
+
+})
 
 /**
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
+//Important Line//server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 
@@ -100,5 +107,5 @@ function onListening() {
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+  debug('Listening on ' + bind +addr.address);
 }

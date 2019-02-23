@@ -13,9 +13,11 @@ var Database_Object;
 router.get('/', (req, res, next) => {
    console.log("INside AaddQuestions")
     //mongoose.model('Question').remove({});
-    Database_Object=new Database();
 
-    res.render('AddQuestions')
+
+        res.render('AddQuestions')
+
+
 
 })
 router.get('/DeleteDatabase',function (req, res, next) {
@@ -27,29 +29,35 @@ router.get('/DeleteDatabase',function (req, res, next) {
 
 })
 
+router.get('/EditDatabase',function (req, res, next) {
+    console.log("inside Edit Database!!!!!")
+    title="Edit a Question"
+    Database_Object.EditQuestion();
+    res.render('EditQuestion',{ title })
+    res.redirect('/AddQuestions')
+
+})
 
 router.post('/', (req, res, next) => {
 
-    console.log("Going in"+" "+req.body.QuestionText+req.body.AnswerA+ req.body.AnswerB+
-        req.body.AnswerC+req.body.AnswerD,req.body.Tag,req.body.Right_Answer)
-    Body_List=ParseText([req.body.QuestionText,req.body.AnswerA,req.body.AnswerB,req.body.AnswerC,req.body.AnswerD,req.body.AnswerE,
-        req.body.Tag,req.body.Test,req.body.Test_Type,req.body.Right_Answer])
+    if( req.body.hasOwnProperty("Edit_Button")){
+        console.log("Edit Button was pressed!")
+        var title="Search/Edit a Question"
+        res.render('EditQuestion',{title})
+    }
+    else{//ADd Question was pressed
+        Body_List=ParseText([req.body.QuestionText,req.body.AnswerA,req.body.AnswerB,req.body.AnswerC,req.body.AnswerD,req.body.AnswerE,
+            req.body.Tag,req.body.Test,req.body.Test_Type,req.body.RightAnswer,req.body.Passage,req.body.Question_Number])
+        console.log("Going in"+" "+req.body.QuestionText+req.body.AnswerA+ req.body.AnswerB+
+            req.body.AnswerC+req.body.AnswerD+" "+req.body.Tag+" "+req.body.RightAnswer+" "+req.body.Passage,
+            req.body.Question_Number)
 
-    console.log("Question of Text outside"+Body_List[0]);
-    console.log("BodyList outside"+Body_List[1]);
-    console.log("BodyList outside"+Body_List[2]);
-    console.log("BodyList outside"+Body_List[3]);
-    console.log("BodyList outside"+Body_List[4]);
-    console.log("BodyList outside"+Body_List[5]);
-    console.log("BodyList outside"+Body_List[6]);
-    console.log("BodyList outside"+Body_List[7]);
-    console.log("BodyList outside"+Body_List[8]);
-    console.log("BodyList outside"+Body_List[9]);
+        Database_Object.addNewQuestion(Body_List);
 
-    Database_Object.addNewQuestion(Body_List);
+        const title='Successful Entry of Question, if you would like to enter new questions please do below...'
+        res.render('AddQuestions',{ title })
+    }
 
-    const title='Successful Entry of Question, if you would like to enter new questions please do below...'
-    res.render('AddQuestions',{ title })
 
 
 })
