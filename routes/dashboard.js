@@ -42,10 +42,11 @@ router.get('/Question_Loop',function (req, res, next) {
     Question_object=Database_Object.getQuestion()
 
     title=Question_object.Question_text;
+    console.log("The passage"+" "+Question_object.getPassage())
     res.render('register_Question', {title, Answer_A:Question_object.getOptions()[0],
         Answer_B:Question_object.getOptions()[1],Answer_C:Question_object.getOptions()[2],
         Answer_D: Question_object.getOptions()[3], Answer_E:Question_object.getOptions()[4],
-        storyboxID:Question_object.Question_text
+        storyboxID:Question_object.getPassage()
     })
 
 

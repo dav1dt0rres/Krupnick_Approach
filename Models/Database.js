@@ -1,8 +1,9 @@
 var mongoose = require('mongoose');
-const Question_database = mongoose.model('Question');
+var Question_database = mongoose.model('Question');
+var temp_Schema=require('../Models/Question');
 const StudentSchema = mongoose.model('Student');
 const SessionSchema=mongoose.model('Session')
-
+const async = require('async');
 const Question = require('./Question.js');
 module.exports= class Database {
 
@@ -14,8 +15,19 @@ module.exports= class Database {
 
     }
     DeleteEntries() {
-        Question_database.remove({});
 
+
+
+
+        Question_database.find({ }).remove().exec();
+       // this.getNumberofQuestions();
+
+
+    }
+    getNumberofQuestions(){
+        this.getOrderedQuestions();
+
+        return this.List_Questions.length;
     }
 
     // Adding a method to the constructor
@@ -38,25 +50,28 @@ module.exports= class Database {
 
         var Choice_List=[]
 
-        Question_database.find({},'Question_body Choices Tag').then( (artworks) => {
+        Question_database.find({},'Question_body Choices Tag Number Passage').then( (artworks) => {
             var keywords = [];
             var counter=0;
             var Question_object=null;
            // console.log("Table"+artworks)
             artworks.forEach( (artwork) => {
 
-                console.log("Question"+artwork.Question_body.join(" "))
+                console.log("Question Here"+" "+artwork.Question_body.join(" "))
                 //console.log("Choices"+artwork.Choices[counter].replace(/,/g, ' '))
-                //console.log("Tag"+artwork.Tag)
+
 
                 for(var i=0;i<artwork.Choices.length;++i){
                     artwork.Choices[i]=artwork.Choices[i].replace(/,/g, ' ');
                 }
-                //console.log("Choices"+artwork.Choices)
-                //console.log(" ")
-               Question_object=new Question(artwork.Question_body.join(" "),artwork.Choices,artwork.Tag)
-               keywords[counter]=Question_object;
+
+                console.log("Tag"+artwork.Tag+" "+artwork.Passage);
+                //artwork.Tag,artwork.Number,artwork.Right_Answer,artwork.Passage.join(" ")
+               Question_object=new Question(artwork.Question_body.join(" "),artwork.Choices,artwork.Tag,artwork.Number,artwork.Passage)
+
+                keywords[counter]=Question_object;
                 ++counter;
+                console.log("counter"+" "+counter+" "+keywords.length);
             });
             this.List_Questions=keywords;
             console.log("List of QUestions"+this.List_Questions);
@@ -64,36 +79,51 @@ module.exports= class Database {
         });
 
     }///Give me all the questions of a test in order 1-10,11-20 etc
-    SearchQuestion(test,test_Number,test_Type){
-        var Question_temp=null;
-        Question_database.find({Test:test,  Number:test_Number, Test_Type:test_Type},'Question_body Choices Tag Test Number ' +
-            'Test_Type Right_Answer Passage ').then( (artworks) => {
-            var Key_Object =null;
+    SearchQuestion(text){
+        var List = [];
+        var counter=0;
+        var Question_object=null;
+
+        Question_database.find({"Question_body":{"$regex":text}},'Question_body Choices Tag Test Number ' +
+            'Test_Type Right_Answer Passage').then( (artworks) => {
+
             var Question_object=null;
             // console.log("Table"+artworks)
-            console.log("INside the Database Search")
+           // console.log("INside the Database Search")
             artworks.forEach( (artwork) => {
 
-                console.log("Returning Question"+artwork.Question_body.join(" "))
+                //console.log("Returning Question"+artwork.Question_body.join(" "))
                 //console.log("Choices"+artwork.Choices[counter].replace(/,/g, ' '))
-                console.log("Returning Tag"+artwork.Tag)
+                //console.log("Returning Tag"+artwork.Tag)
 
                 for(var i=0;i<artwork.Choices.length;++i){
                     artwork.Choices[i]=artwork.Choices[i].replace(/,/g, ' ');
                 }
-                console.log("Returning Choices"+artwork.Choices)
+                //console.log("Returning Choices"+artwork.Choices)
                 console.log(" ")
 
                 Question_object=new Question(artwork.Question_body.join(" "),artwork.Choices,artwork.Tag)
 
                 Question_object.setEditQuestion(artwork.Question_body.join(" "),artwork.Choices,artwork.Tag,
                     artwork.Number,artwork.Test,artwork.Test_Type,artwork.Right_Answer,artwork.Passage)
+                List[counter]=Question_object;
+            ++counter;
+
             });
-           Question_temp=Question_object;
-            console.log("Question Returning"+Question_temp.getQuestionText());
-            // Now do your job with all the retrieved keywords
+
+            async.parallel(List, function(err, result) {
+                console.log("Returning"+" "+List.length)
+                return List;
+                if (err)
+                    return console.log(err);
+                console.log(result);
+            });
+            console.log("Inside Database"+" "+List.length)
+
+
+
         });
-        return Question_temp;
+
     }
     getSame_MethodQuestion(Question_Object){
         var Choice_List=[]
@@ -128,6 +158,7 @@ module.exports= class Database {
 
     }
     addNewQuestion(BodyList){
+        console.log("Inside adding new Question in Database"+" "+BodyList[10])
         var newQuestion = new Question_database({
             Question_body: Body_List[0],
             Tag:Body_List[6],

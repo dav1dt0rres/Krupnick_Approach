@@ -5,6 +5,8 @@ var mongoose = require( 'mongoose' )
 var Database=require('../Models/Database.js');
 const router = express.Router()
 const Question_Schema = mongoose.model('Question');
+let jsdom = require('jsdom').JSDOM
+
 
 var Database_Object;
 
@@ -12,12 +14,13 @@ var Database_Object;
 
 router.get('/', (req, res, next) => {
    console.log("INside AaddQuestions")
-    //mongoose.model('Question').remove({});
 
 
-        res.render('AddQuestions')
+    Database_Object=new Database("MISC");
 
 
+
+    res.render('AddQuestions',{RightAnswer:"John Smith"})
 
 })
 router.get('/DeleteDatabase',function (req, res, next) {
@@ -32,9 +35,9 @@ router.get('/DeleteDatabase',function (req, res, next) {
 router.get('/EditDatabase',function (req, res, next) {
     console.log("inside Edit Database!!!!!")
     title="Edit a Question"
-    Database_Object.EditQuestion();
+    //Database_Object.EditQuestion();
     res.render('EditQuestion',{ title })
-    res.redirect('/AddQuestions')
+   // res.redirect('/AddQuestions')
 
 })
 
@@ -46,11 +49,13 @@ router.post('/', (req, res, next) => {
         res.render('EditQuestion',{title})
     }
     else{//ADd Question was pressed
-        Body_List=ParseText([req.body.QuestionText,req.body.AnswerA,req.body.AnswerB,req.body.AnswerC,req.body.AnswerD,req.body.AnswerE,
-            req.body.Tag,req.body.Test,req.body.Test_Type,req.body.RightAnswer,req.body.Passage,req.body.Question_Number])
+
         console.log("Going in"+" "+req.body.QuestionText+req.body.AnswerA+ req.body.AnswerB+
-            req.body.AnswerC+req.body.AnswerD+" "+req.body.Tag+" "+req.body.RightAnswer+" "+req.body.Passage,
-            req.body.Question_Number)
+            req.body.AnswerC+req.body.AnswerD+" "+req.body.Tag+" "+req.body.RightAnswer+" "+"THIS IS THE PASSAGE"+" "+req.body.Passage,
+            "THIS IS THE QUESTION NUMBER"+" " +req.body.Question_Number+" "+req.body.Test_Type+" "+req.body.Test)
+        Body_List=ParseText([req.body.QuestionText,req.body.AnswerA,req.body.AnswerB,req.body.AnswerC,req.body.AnswerD,req.body.AnswerE,
+            req.body.Tag,req.body.Test.toString(),req.body.Test_Type.toString(),req.body.RightAnswer,req.body.Passage,req.body.Question_Number])
+
 
         Database_Object.addNewQuestion(Body_List);
 

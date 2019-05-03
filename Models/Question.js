@@ -1,7 +1,9 @@
 
 module.exports= class Question {
+    //artwork.Question_body.join(" "),artwork.Choices,artwork.Tag,artwork.Number,artwork.Right_Answer,artwork.Passage.join(" ")
 
-    constructor(question_text, optionList,tag) {
+    constructor(question_text, optionList,tag,number,passage) {
+        //artwork.Tag,artwork.Number,artwork.Right_Answer,artwork.Passage.join(" ")
         this.Question_text = question_text;
         this.OptionList=optionList;
         this.Response=null;
@@ -13,17 +15,20 @@ module.exports= class Question {
         this.Test_Type=null;
         this.Right_Answer=null;
         this.StudentAnswer=null;
-        this.Passage=null;
+        this.Passage=passage;
+        console.log("Inside constructor of Question")
     }
-    setEditQuestion(question_text, optionList,tag, Number,Test,Test_Type,Right_Answer,Passage){
-        this.Question_text = question_text;
-        this.OptionList=optionList;
+    setEditQuestion(Number,Right_Answer,Passage){
+
         this.Number=Number;
-        this.Tag=tag;
-        this.Test=Test;
-        this.Test_Type=Test_Type;
+
         this.Right_Answer=Right_Answer;
         this.Passage=Passage;
+    }
+    getPassage(){
+
+        return this.Passage.replace(',', '');
+
     }
     // Adding a method to the constructor
     getOptions() {

@@ -6,11 +6,13 @@
 /////Database////////////////////////
 ////////////////////////
 var mongoose = require("mongoose");
-
 mongoose.connect("mongodb://127.0.0.1:27017/?gssapiServiceName=mongodb");
 var db = mongoose.connection;
-db.on("error", console.error.bind(console, "connection error"));
+
 db.once("open", function(callback) {console.log("Connection succeeded.")});
+
+//db.on("error", console.error.bind(console, "connection error"));
+//db.once("open", function(callback) {console.log("Connection succeeded.")});
 
 require('../Models/QuestionSchema');
 //require('../Models/Student_Schema');

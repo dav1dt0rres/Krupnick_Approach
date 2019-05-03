@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
-var QuestionSchema = new Schema({
+var QuestionSchema = new Schema( {
     Question_body: [String],
     Tag: String,
     Choices: [[String]],
@@ -14,4 +14,6 @@ var QuestionSchema = new Schema({
 });
 
 
-module.exports.question=mongoose.model('Question', QuestionSchema);
+
+//module.exports=QuestionSchema
+module.exports=mongoose.model('Question', QuestionSchema);
